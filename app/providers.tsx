@@ -4,22 +4,23 @@ import * as React from 'react';
 import {
   RainbowKitProvider,
   getDefaultWallets,
-  darkTheme,
+  lightTheme,
 } from '@rainbow-me/rainbowkit';
 import { createConfig, WagmiConfig } from 'wagmi';
-import { mainnet, baseGoerli } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createPublicClient, http, Chain } from 'viem';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
+import { FarcasterKitProvider } from '@farcaster/auth-kit';
 
 const projectId = 'YOUR_WALLETCONNECT_PROJECT_ID';
 
-// Define supported chains
-const chains = [mainnet, baseGoerli] as const;
+// Define supported chains - using Base mainnet
+const chains = [base] as const;
 
 // Get wallets
 const { wallets } = getDefaultWallets({
-  appName: 'FLUX',
+  appName: 'Base USDC Spender',
   projectId: projectId,
 });
 
@@ -27,8 +28,7 @@ const { wallets } = getDefaultWallets({
 const wagmiConfig = createConfig({
   chains,
   transports: {
-    [mainnet.id]: http(),
-    [baseGoerli.id]: http(),
+    [base.id]: http(),
   },
 });
 
@@ -48,23 +48,32 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          theme={darkTheme()}
-          modalSize="compact"
-        >
-          <OnchainKitProvider
-            config={{
-              appearance: {
-                name: 'FLUX',
-                mode: 'dark',
-                theme: 'default',
-              },
-            }}
-            chain={baseGoerli as Chain}
+        <FarcasterKitProvider>
+          <RainbowKitProvider
+            theme={lightTheme({
+              accentColor: '#3B82F6',
+              accentColorForeground: 'white',
+              borderRadius: 'medium',
+              fontStack: 'system',
+              overlayBlur: 'small',
+            })}
+            modalSize="compact"
+            chains={chains}
           >
-            {children}
-          </OnchainKitProvider>
-        </RainbowKitProvider>
+            <OnchainKitProvider
+              config={{
+                appearance: {
+                  name: 'Base USDC Spender',
+                  mode: 'light',
+                  theme: 'default',
+                },
+              }}
+              chain={base as Chain}
+            >
+              {children}
+            </OnchainKitProvider>
+          </RainbowKitProvider>
+        </FarcasterKitProvider>
       </QueryClientProvider>
     </WagmiConfig>
   );
