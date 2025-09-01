@@ -11,6 +11,7 @@ import { base } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createPublicClient, http, Chain } from 'viem';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
+import { FarcasterKitProvider } from '@farcaster/auth-kit';
 
 const projectId = 'YOUR_WALLETCONNECT_PROJECT_ID';
 
@@ -47,30 +48,32 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          theme={lightTheme({
-            accentColor: '#3B82F6',
-            accentColorForeground: 'white',
-            borderRadius: 'medium',
-            fontStack: 'system',
-            overlayBlur: 'small',
-          })}
-          modalSize="compact"
-          chains={chains}
-        >
-          <OnchainKitProvider
-            config={{
-              appearance: {
-                name: 'Base USDC Spender',
-                mode: 'light',
-                theme: 'default',
-              },
-            }}
-            chain={base as Chain}
+        <FarcasterKitProvider>
+          <RainbowKitProvider
+            theme={lightTheme({
+              accentColor: '#3B82F6',
+              accentColorForeground: 'white',
+              borderRadius: 'medium',
+              fontStack: 'system',
+              overlayBlur: 'small',
+            })}
+            modalSize="compact"
+            chains={chains}
           >
-            {children}
-          </OnchainKitProvider>
-        </RainbowKitProvider>
+            <OnchainKitProvider
+              config={{
+                appearance: {
+                  name: 'Base USDC Spender',
+                  mode: 'light',
+                  theme: 'default',
+                },
+              }}
+              chain={base as Chain}
+            >
+              {children}
+            </OnchainKitProvider>
+          </RainbowKitProvider>
+        </FarcasterKitProvider>
       </QueryClientProvider>
     </WagmiConfig>
   );

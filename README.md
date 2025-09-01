@@ -7,7 +7,8 @@ A fast and user-friendly mini app for sending USDC on the Base blockchain direct
 - 🚀 **Lightning Fast**: Instant USDC transfers on Base blockchain
 - 📱 **Mobile First**: Send to any mobile number, no wallet address needed
 - 💰 **USDC Stable**: 1:1 USD backed stablecoin for reliable payments
-- 🔗 **Lens Integration**: Phone number resolution through Lens Protocol
+- 🔗 **Farcaster Integration**: Phone number resolution through Farcaster profiles
+- ⚡ **Base Powered**: Built on Base L2 for ultra-fast, low-cost transactions
 - 📊 **Transaction History**: View all your recent transfers
 - 🎨 **Modern UI**: Beautiful, responsive design with smooth animations
 
@@ -17,7 +18,8 @@ A fast and user-friendly mini app for sending USDC on the Base blockchain direct
 - **Styling**: Tailwind CSS, Framer Motion
 - **Blockchain**: Wagmi, Viem, RainbowKit
 - **Network**: Base (Coinbase's L2)
-- **Protocol**: Lens Protocol for phone number resolution
+- **Protocol**: Farcaster for social profiles and phone number resolution
+- **Base Integration**: Base SDK for blockchain operations
 - **UI Components**: Lucide React icons, React Hot Toast
 
 ## Prerequisites
@@ -45,8 +47,8 @@ Create a `.env.local` file in the root directory:
 # WalletConnect Project ID (get from https://cloud.walletconnect.com/)
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
 
-# Lens Protocol API Key (optional, for enhanced features)
-NEXT_PUBLIC_LENS_API_KEY=your_lens_api_key
+# Farcaster API Key (get from https://warpcast.com/~/developers)
+NEXT_PUBLIC_FARCASTER_API_KEY=your_farcaster_api_key
 
 # Base RPC URL (optional, uses public RPC by default)
 NEXT_PUBLIC_BASE_RPC_URL=https://mainnet.base.org
@@ -89,10 +91,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Phone Number Resolution
 
-The app uses Lens Protocol to resolve phone numbers to wallet addresses:
+The app uses Farcaster to resolve phone numbers to wallet addresses:
 
-- Users can associate their phone number with their Lens profile
-- The app searches Lens profiles to find matching phone numbers
+- Users can associate their phone number with their Farcaster profile
+- The app searches Farcaster profiles to find matching phone numbers
 - If found, the associated wallet address is used for the transfer
 
 ### Transaction History
@@ -115,38 +117,26 @@ The app uses Lens Protocol to resolve phone numbers to wallet addresses:
 - `transfer(address to, uint256 amount)` - Transfer USDC to another address
 - `balanceOf(address account)` - Get USDC balance of an account
 
-## Lens Protocol Integration
+## Farcaster Integration
 
-The app integrates with Lens Protocol for phone number resolution:
+The app integrates with Farcaster for phone number resolution and social features:
 
 ### API Endpoints
 
-- **Search Profiles**: Query Lens profiles by phone number
-- **Get Profile**: Retrieve profile details by handle
-- **Update Metadata**: Associate phone numbers with profiles
+- **Search Profiles**: Query Farcaster profiles by username or FID
+- **Get Profile**: Retrieve profile details and verified addresses
+- **Social Features**: Integration with Farcaster's social network
 
-### GraphQL Queries
+### Profile Structure
 
-```graphql
-query SearchProfiles($query: String!) {
-  search(request: {
-    query: $query,
-    type: PROFILE,
-    limit: 10
-  }) {
-    items {
-      ... on Profile {
-        id
-        handle
-        ownedBy
-        metadata {
-          phoneNumber
-          displayName
-          bio
-        }
-      }
-    }
-  }
+```typescript
+interface FarcasterProfile {
+  fid: number;
+  username: string;
+  displayName: string;
+  pfp: string;
+  verifiedAddresses: string[];
+  phoneNumber?: string;
 }
 ```
 
@@ -162,7 +152,8 @@ query SearchProfiles($query: String!) {
 ├── components/            # React components
 │   ├── USDCSpender.tsx   # Main USDC transfer interface
 │   ├── TransactionHistory.tsx # Transaction history
-│   └── LensService.ts    # Lens Protocol integration
+│   ├── FarcasterService.ts # Farcaster integration
+│   └── BaseService.ts    # Base blockchain operations
 ├── public/               # Static assets
 └── package.json          # Dependencies
 ```
@@ -171,7 +162,8 @@ query SearchProfiles($query: String!) {
 
 - **USDCSpender**: Main transfer interface with phone number input
 - **TransactionHistory**: Displays recent transactions
-- **LensService**: Handles phone number resolution via Lens Protocol
+- **FarcasterService**: Handles phone number resolution via Farcaster
+- **BaseService**: Manages Base blockchain operations and USDC interactions
 
 ### Adding Features
 
@@ -198,7 +190,7 @@ query SearchProfiles($query: String!) {
 
 2. **"Phone Number Not Found"**
    - Verify the phone number format
-   - Check if the recipient has a Lens profile
+   - Check if the recipient has a Farcaster profile
    - Try entering the wallet address directly
 
 3. **"Transaction Failed"**
@@ -215,7 +207,7 @@ query SearchProfiles($query: String!) {
 
 For issues and questions:
 - Check the [Base documentation](https://docs.base.org/)
-- Visit [Lens Protocol docs](https://docs.lens.xyz/)
+- Visit [Farcaster docs](https://docs.farcaster.xyz/)
 - Open an issue in this repository
 
 ## License

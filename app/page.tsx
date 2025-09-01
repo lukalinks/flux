@@ -44,7 +44,7 @@ export default function Home() {
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Transfer USDC on Base blockchain directly to any mobile number. 
-            Fast, secure, and seamless payments powered by Lens Protocol.
+            Fast, secure, and seamless payments powered by Farcaster and Base.
           </p>
         </motion.div>
 
@@ -71,12 +71,12 @@ export default function Home() {
             <p className="text-gray-600">Send to any mobile number, no wallet address needed</p>
           </div>
           
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
             <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
               <DollarSign className="w-6 h-6 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">USDC Stable</h3>
-            <p className="text-gray-600">Stable value with 1:1 USD backing, perfect for payments</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Base Powered</h3>
+            <p className="text-gray-600">Built on Base L2 for ultra-fast, low-cost transactions</p>
           </div>
         </motion.div>
 

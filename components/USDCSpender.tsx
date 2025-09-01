@@ -56,7 +56,7 @@ const USDC_ABI = [
   }
 ] as const;
 
-import { lensService, type LensProfile } from './LensService';
+import { farcasterService, type FarcasterProfile } from './FarcasterService';
 
 export default function USDCSpender() {
   const { address, isConnected } = useAccount();
@@ -81,17 +81,17 @@ export default function USDCSpender() {
     hash,
   });
 
-  // Resolve phone number to wallet address using Lens Protocol
+  // Resolve phone number to wallet address using Farcaster
   const resolvePhoneNumber = async (phone: string) => {
     if (!phone) return;
     
     setIsResolving(true);
     try {
-      const result = await lensService.searchByPhoneNumber(phone);
+      const result = await farcasterService.searchByPhoneNumber(phone);
       
       if (result.success && result.address) {
         setRecipientAddress(result.address);
-        toast.success(`Found recipient: ${result.profile?.metadata?.displayName || result.profile?.handle || 'Unknown'}`);
+        toast.success(`Found recipient: ${result.profile?.displayName || result.profile?.username || 'Unknown'}`);
       } else {
         toast.error(result.error || 'Could not resolve phone number');
       }
